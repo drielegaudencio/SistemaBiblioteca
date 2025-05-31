@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SistemaBiblioteca</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-indigo-600 text-white shadow-md">
+        <nav class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between">
+            <a class="text-2xl font-bold rounded-md px-2 py-1 hover:bg-indigo-700 transition-colors duration-200" asp-area="" asp-controller="Home" asp-action="Index">Sistema Biblioteca</a>
+
+            <div class="flex-grow flex items-center justify-end md:justify-between order-last md:order-none w-full md:w-auto mt-3 md:mt-0">
+                <ul class="flex-grow flex flex-col md:flex-row md:space-x-8 md:ml-8">
+                    <li class="nav-item">
+                        <a class="nav-link text-lg font-medium px-3 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-200" asp-area="" asp-controller="Livros" asp-action="Index">Livros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-lg font-medium px-3 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-200" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuários</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-lg font-medium px-3 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-200" asp-area="" asp-controller="Funcionarios" asp-action="Index">Funcionários</a>
+                    </li>
+                </ul>
+
+                <div class="relative flex items-center ml-auto md:ml-0 w-full md:w-auto">
+                    <input type="search" placeholder="Pesquisar..." class="w-full md:w-48 px-4 py-2 rounded-md bg-indigo-700 text-white placeholder-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent transition-all duration-200" />
+                    <button type="submit" class="absolute right-0 top-0 mt-2 mr-3 text-indigo-200 hover:text-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-t border-gray-300 bg-white text-gray-600 text-center py-4 mt-8 shadow-inner">
+        <div class="container mx-auto px-4">
+            &copy; @DateTime.Now.Year - Sistema Biblioteca - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-indigo-600 hover:text-indigo-800">Privacidade</a>
+        </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+
+
+
+
+
+
+@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Biblioteca</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Biblioteca.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Biblioteca</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - Biblioteca - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> *@

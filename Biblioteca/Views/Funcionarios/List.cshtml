@@ -1,0 +1,346 @@
+﻿@model IEnumerable<Biblioteca.Models.Funcionario>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    /* Variáveis de cores para consistência com o _Layout.cshtml */
+    :root {
+        --primary-indigo: #4F46E5; /* indigo-600 */
+        --primary-indigo-dark: #4338CA; /* indigo-700 */
+        --primary-indigo-darker: #3730A3; /* indigo-800 */
+        --text-gray-900: #111827; /* gray-900 */
+        --text-gray-700: #374151; /* gray-700 */
+        --text-gray-500: #6B7280; /* gray-500 */
+        --bg-gray-50: #F9FAFB; /* gray-50 */
+        --border-gray-200: #E5E7EB; /* gray-200 */
+        --red-600: #DC2626; /* red-600 */
+        --red-800: #991B1B; /* red-800 */
+        --blue-600: #2563EB; /* blue-600 */
+        --blue-800: #1E40AF; /* blue-800 */
+    }
+
+    /* Estilo para o título principal */
+    h1 {
+        color: var(--text-gray-900);
+        font-size: 2.25rem; /* Corrigido para 3xl (36px) */
+        font-weight: 700; /* bold */
+        margin-bottom: 1.5rem; /* mb-6 */
+    }
+
+    /* Estilo para o botão de "Criar Novo" */
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem; /* px-4 py-2 */
+        border: 1px solid transparent;
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        color: white;
+        background-color: var(--primary-indigo);
+        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+        .btn-primary:hover {
+            background-color: var(--primary-indigo-dark);
+            transform: translateY(-1px); /* Pequeno efeito de elevação */
+        }
+
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5); /* ring-2, ring-offset-2, ring-indigo-500 */
+        }
+
+    /* Estilo para a tabela */
+    .table-container {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        overflow-x: auto; /* Para tabelas em telas pequenas */
+        border-bottom: 1px solid var(--border-gray-200);
+        border-radius: 0.5rem; /* sm:rounded-lg */
+    }
+
+    .data-table {
+        min-width: 100%;
+        border-collapse: collapse; /* remove espaçamento entre células */
+        background-color: white;
+    }
+
+        .data-table thead {
+            background-color: var(--bg-gray-50);
+        }
+
+        .data-table th {
+            padding: 0.75rem 1.5rem; /* px-6 py-3 */
+            text-align: left;
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* font-medium */
+            color: var(--text-gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em; /* tracking-wider */
+        }
+
+        .data-table td {
+            padding: 1rem 1.5rem; /* px-6 py-4 */
+            white-space: nowrap;
+            font-size: 0.875rem; /* text-sm */
+            color: var(--text-gray-700);
+            border-top: 1px solid var(--border-gray-200); /* divide-y */
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none; /* Remove a borda inferior da última linha */
+        }
+
+        .data-table td.font-medium {
+            font-weight: 500; /* Corrigido para font-medium */
+            color: var(--text-gray-900);
+        }
+
+    /* Estilo para links de ação na tabela */
+    .action-link {
+        font-weight: 500; /* font-medium */
+        margin-right: 1rem; /* mr-4 */
+        transition: color 0.2s ease-in-out;
+    }
+
+        .action-link.edit {
+            color: var(--primary-indigo);
+        }
+
+            .action-link.edit:hover {
+                color: var(--primary-indigo-darker);
+            }
+
+        .action-link.details {
+            color: var(--blue-600);
+        }
+
+            .action-link.details:hover {
+                color: var(--blue-800);
+            }
+
+        .action-link.delete {
+            color: var(--red-600);
+        }
+
+            .action-link.delete:hover {
+                color: var(--red-800);
+            }
+
+    /* Estilo para o campo de busca */
+    .search-container {
+        display: flex;
+        gap: 0.5rem; /* space-x-2 */
+        margin-bottom: 1.5rem; /* mb-6 */
+        align-items: center;
+    }
+
+    .search-input {
+        flex-grow: 1;
+        padding: 0.5rem 0.75rem; /* px-3 py-2 */
+        border: 1px solid var(--border-gray-200);
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        font-size: 0.875rem; /* text-sm */
+        color: var(--text-gray-900);
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-indigo);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25); /* ring-indigo-500 com opacidade */
+        }
+
+    .search-button {
+        padding: 0.5rem 1rem; /* px-4 py-2 */
+        border: 1px solid transparent;
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        color: white;
+        background-color: var(--primary-indigo);
+        transition: background-color 0.2s ease-in-out;
+    }
+
+        .search-button:hover {
+            background-color: var(--primary-indigo-dark);
+        }
+
+        .search-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+        }
+
+    /* Estilo para os links de navegação adicionais */
+    .nav-links-secondary a {
+        color: var(--primary-indigo);
+        font-weight: 500; /* Corrigido para font-medium */
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+        margin-bottom: 0.5rem; /* Espaçamento entre os links */
+        display: block; /* Para que cada link ocupe uma linha */
+    }
+
+        .nav-links-secondary a:hover {
+            color: var(--primary-indigo-darker);
+            text-decoration: underline;
+        }
+
+    .nav-links-secondary svg {
+        margin-right: 0.5rem; /* Espaçamento entre ícone e texto */
+        display: inline-block;
+        vertical-align: middle;
+        height: 1rem; /* Ajustado para h-4 (16px) */
+        width: 1rem; /* Ajustado para w-4 (16px) */
+    }
+
+</style>
+<h1>Listagem de Funcionários</h1>
+
+<p>
+    <a asp-action="Create">Adicionar Novo Funcionário</a>
+</p>
+
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Cpf)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Cargo)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Salario)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Telefone)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th scope="col" class="text-right">
+                    <span>Ações</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="font-medium">
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cpf)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cargo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Salario)
+                        </td>
+                        <td>
+                            @(string.IsNullOrEmpty(item.Telefone) ? "N/A" : item.Telefone)
+                        </td>
+                        <td>
+                            @(string.IsNullOrEmpty(item.Email) ? "N/A" : item.Email)
+                        </td>
+                        <td class="text-right">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="action-link edit">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="action-link details">Detalhes</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="action-link delete">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-sm text-gray-500 py-4">Nenhum funcionário encontrado. Adicione um novo funcionário!</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@* 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Cargo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Salario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Matricula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cpf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cargo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Salario)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Matricula)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cpf)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+ *@
