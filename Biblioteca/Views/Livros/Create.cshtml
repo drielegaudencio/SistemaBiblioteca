@@ -1,0 +1,467 @@
+﻿@model Biblioteca.Models.Livro
+
+@{
+    ViewData["Title"] = "Adicionar Novo Livro";
+}
+
+<h1 class="form-page-title">Adicionar Novo Livro</h1>
+<style>
+    /* wwwroot/css/_FormStyles.css */
+
+    /* Variáveis de cores para consistência */
+    :root {
+        --primary-indigo: #4F46E5; /* indigo-600 */
+        --primary-indigo-dark: #4338CA; /* indigo-700 */
+        --primary-indigo-darker: #3730A3; /* indigo-800 */
+        --text-gray-900: #111827; /* gray-900 */
+        --text-gray-700: #374151; /* gray-700 */
+        --border-gray-300: #D1D5DB; /* gray-300 */
+        --red-600: #DC2626; /* red-600 */
+        --red-800: #991B1B; /* red-800 */
+        --bg-gray-50: #F9FAFB; /* gray-50 */
+    }
+
+    /* Estilo para o título principal (se for comum em todas as páginas de formulário) */
+    .form-page-title {
+        color: var(--text-gray-900);
+        font-size: 2.25rem; /* 3xl */
+        font-weight: 700; /* bold */
+        margin-bottom: 1.5rem; /* mb-6 */
+    }
+
+    /* Contêiner principal do formulário */
+    .form-container {
+        background-color: white;
+        padding: 2rem; /* p-8 */
+        border-radius: 0.5rem; /* rounded-lg */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-md */
+        max-width: 32rem; /* max-w-lg */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Estilo para cada grupo de formulário (label + input + validação) */
+    .form-group {
+        margin-bottom: 1rem; /* mb-4 */
+    }
+
+    /* Estilo para labels */
+    .control-label {
+        display: block;
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        color: var(--text-gray-700);
+        margin-bottom: 0.25rem; /* mb-1 */
+    }
+
+    /* Estilo para inputs de formulário */
+    .form-control {
+        display: block;
+        width: 100%; /* w-full */
+        border: 1px solid var(--border-gray-300);
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        padding: 0.5rem 0.75rem; /* py-2 px-3 */
+        font-size: 0.875rem; /* sm:text-sm */
+        color: var(--text-gray-900);
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-indigo);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25); /* focus:ring-indigo-500, focus:border-indigo-500 */
+        }
+
+    /* Estilo para mensagens de validação */
+    .text-danger {
+        color: var(--red-600);
+        font-size: 0.75rem; /* text-xs */
+        margin-top: 0.25rem; /* mt-1 */
+        display: block;
+    }
+
+    /* Estilo para o sumário de validação (topo do formulário) */
+    .validation-summary-errors {
+        color: var(--red-600);
+        margin-bottom: 1rem; /* mb-4 */
+        font-weight: 500;
+    }
+
+    /* Estilo para botões de submissão */
+    .btn-submit {
+        display: inline-flex;
+        justify-content: center;
+        padding: 0.5rem 1rem; /* py-2 px-4 */
+        border: 1px solid transparent;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        border-radius: 0.375rem; /* rounded-md */
+        color: white;
+        background-color: var(--primary-indigo);
+        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+        .btn-submit:hover {
+            background-color: var(--primary-indigo-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+        }
+
+    /* Estilo para botão de "Voltar" */
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border-gray-300);
+        border-radius: 0.375rem;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-gray-700);
+        background-color: white;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+        .btn-back:hover {
+            background-color: var(--bg-gray-50); /* gray-50 */
+        }
+
+        .btn-back:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+        }
+
+    /* Layout dos botões no final do formulário */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem; /* space-x-3 */
+        margin-top: 1.5rem; /* mt-6 */
+    }
+
+    /* --- Novos estilos para o layout de duas colunas e busca de livros --- */
+    .two-column-layout {
+        display: flex;
+        flex-wrap: wrap; /* Permite que as colunas quebrem em telas menores */
+        gap: 2rem; /* Espaço entre as colunas */
+        align-items: flex-start; /* Alinha o topo das colunas */
+    }
+
+    .column-left {
+        flex: 1; /* Ocupa o espaço restante */
+        min-width: 20rem; /* Largura mínima para evitar que encolha demais */
+    }
+
+    .column-right {
+        flex: 1; /* Ocupa o espaço restante */
+        min-width: 20rem; /* Largura mínima */
+        background-color: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+
+    .search-section h2 {
+        font-size: 1.5rem; /* text-2xl */
+        font-weight: 600; /* semibold */
+        color: var(--text-gray-900);
+        margin-bottom: 1rem;
+    }
+
+    .search-input-group {
+        display: flex;
+        gap: 0.5rem; /* Espaço entre input e botão */
+        margin-bottom: 1rem;
+    }
+
+        .search-input-group .form-control { /* Reutiliza o estilo do input de formulário */
+            flex-grow: 1;
+        }
+
+    .search-button-custom {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border: 1px solid transparent;
+        border-radius: 0.375rem;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: white;
+        background-color: var(--primary-indigo);
+        transition: background-color 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+        .search-button-custom:hover {
+            background-color: var(--primary-indigo-dark);
+        }
+
+        .search-button-custom:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+        }
+
+    .results-viewer {
+        margin-top: 1.5rem;
+        max-height: 400px; /* Altura máxima para o scroll */
+        overflow-y: auto; /* Adiciona barra de rolagem vertical */
+        border: 1px solid var(--border-gray-300);
+        border-radius: 0.375rem;
+        padding: 1rem;
+        background-color: var(--bg-gray-50);
+    }
+
+        .results-viewer .book-result-item {
+            background-color: white;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+            .results-viewer .book-result-item:hover {
+                background-color: #F0F4FF; /* indigo-50 light */
+                transform: translateY(-2px);
+            }
+
+            .results-viewer .book-result-item h3 {
+                font-size: 1rem;
+                font-weight: 600;
+                color: var(--text-gray-900);
+                margin-bottom: 0.25rem;
+            }
+
+            .results-viewer .book-result-item p {
+                font-size: 0.875rem;
+                color: var(--text-gray-700);
+                margin-bottom: 0.25rem;
+            }
+
+                .results-viewer .book-result-item p:last-child {
+                    margin-bottom: 0;
+                }
+
+    .loading-indicator {
+        text-align: center;
+        padding: 1rem;
+        color: var(--text-gray-700);
+        font-style: italic;
+    }
+
+</style>
+<div class="two-column-layout">
+    <div class="column-left">
+        <div class="form-container">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+
+                <div class="form-group">
+                    <label asp-for="Titulo" class="control-label">Título:</label>
+                    <input asp-for="Titulo" class="form-control" />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Autor" class="control-label">Autor:</label>
+                    <input asp-for="Autor" class="form-control" />
+                    <span asp-validation-for="Autor" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Isbn" class="control-label">ISBN:</label>
+                    <input asp-for="Isbn" class="form-control" />
+                    <span asp-validation-for="Isbn" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GeneroPrincipal" class="control-label">Gênero Principal:</label>
+                    <input asp-for="GeneroPrincipal" class="form-control" />
+                    <span asp-validation-for="GeneroPrincipal" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AnoPublicacao" class="control-label">Ano de Publicação:</label>
+                    <input asp-for="AnoPublicacao" class="form-control" />
+                    <span asp-validation-for="AnoPublicacao" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NumeroPaginas" class="control-label">Número de Páginas:</label>
+                    <input asp-for="NumeroPaginas" class="form-control" />
+                    <span asp-validation-for="NumeroPaginas" class="text-danger"></span>
+                </div>
+
+                <div class="form-actions">
+                    <a asp-action="Index" class="btn-back">Voltar para a Lista</a>
+                    <input type="submit" value="Criar Livro" class="btn-submit" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="column-right search-section">
+        <h2>Buscar Livro na Open Library</h2>
+        <div class="search-input-group">
+            <input type="text" id="openLibrarySearchTerm" class="form-control" placeholder="Digite Título ou ISBN..." />
+            <button type="button" id="searchOpenLibraryBtn" class="search-button-custom">Buscar</button>
+        </div>
+
+        <div id="loadingIndicator" class="loading-indicator" style="display:none;">Carregando resultados...</div>
+        <div id="searchResults" class="results-viewer">
+            <p class="text-gray-500">Nenhum resultado para exibir. Digite um termo de busca e clique em "Buscar".</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchButton = document.getElementById('searchOpenLibraryBtn');
+            const searchTermInput = document.getElementById('openLibrarySearchTerm');
+            const searchResultsDiv = document.getElementById('searchResults');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            searchButton.addEventListener('click', performOpenLibrarySearch);
+            searchTermInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performOpenLibrarySearch();
+                }
+            });
+
+            async function performOpenLibrarySearch() {
+                const searchTerm = searchTermInput.value.trim();
+                if (searchTerm === '') {
+                    searchResultsDiv.innerHTML = '<p class="text-red-600">Por favor, digite um termo de busca (título ou ISBN).</p>';
+                    return;
+                }
+
+                loadingIndicator.style.display = 'block'; // Mostra o indicador de carregamento
+                searchResultsDiv.innerHTML = ''; // Limpa resultados anteriores
+
+                try {
+                    // Chama o endpoint do seu controlador LivrosController.SearchOpenLibrary
+                    const response = await fetch(`@Url.Action("SearchOpenLibrary", "Livros")?searchTerm=${encodeURIComponent(searchTerm)}`);
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        searchResultsDiv.innerHTML = `<p class="text-red-600">Erro na busca: ${errorData.message || response.statusText}</p>`;
+                        return;
+                    }
+
+                    const data = await response.json();
+
+                    if (data.message) { // Se o controller retornar uma mensagem (ex: busca por título não implementada)
+                        searchResultsDiv.innerHTML = `<p class="text-gray-700">${data.message}</p>`;
+                    } else if (data && data.length > 0) {
+                        data.forEach(book => {
+                            const bookItem = document.createElement('div');
+                            bookItem.classList.add('book-result-item');
+                            bookItem.innerHTML = `
+                                <h3>${book.title || 'Título Desconhecido'}</h3>
+                                <p><strong>Autor:</strong> ${book.authors ? book.authors.join(', ') : 'N/A'}</p>
+                                <p><strong>ISBN:</strong> ${book.isbn || 'N/A'}</p>
+                                <p><strong>Páginas:</strong> ${book.numberOfPages || 'N/A'}</p>
+                                <p><strong>Ano:</strong> ${book.publishYear || 'N/A'}</p>
+                            `;
+                            // Adiciona evento de clique para preencher o formulário
+                            bookItem.addEventListener('click', () => fillFormWithBookData(book));
+                            searchResultsDiv.appendChild(bookItem);
+                        });
+                    } else {
+                        searchResultsDiv.innerHTML = '<p class="text-gray-500">Nenhum livro encontrado para o termo fornecido.</p>';
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao buscar livros na Open Library:', error);
+                    searchResultsDiv.innerHTML = '<p class="text-red-600">Ocorreu um erro ao realizar a busca. Tente novamente.</p>';
+                } finally {
+                    loadingIndicator.style.display = 'none'; // Esconde o indicador de carregamento
+                }
+            }
+
+            function fillFormWithBookData(book) {
+                document.getElementById('Titulo').value = book.title || '';
+                document.getElementById('Autor').value = book.authors ? book.authors.join(', ') : '';
+                document.getElementById('Isbn').value = book.isbn || '';
+                document.getElementById('NumeroPaginas').value = book.numberOfPages || '';
+                document.getElementById('AnoPublicacao').value = book.publishYear || '';
+                // GeneroPrincipal não está diretamente disponível na Open Library Book API por ISBN,
+                // mas você pode tentar extrair do 'subjects' se houver, ou deixar em branco.
+                // document.getElementById('GeneroPrincipal').value = book.subjects ? book.subjects[0] : '';
+
+                alert(`Formulário preenchido com dados de "${book.title || 'Livro'}"!`);
+            }
+        });
+    </script>
+}
+
+
+
+@* @model Biblioteca.Models.Livro
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Livro</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Titulo" class="control-label"></label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Autor" class="control-label"></label>
+                <input asp-for="Autor" class="form-control" />
+                <span asp-validation-for="Autor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GeneroPrincipal" class="control-label"></label>
+                <input asp-for="GeneroPrincipal" class="form-control" />
+                <span asp-validation-for="GeneroPrincipal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AnoPublicacao" class="control-label"></label>
+                <input asp-for="AnoPublicacao" class="form-control" />
+                <span asp-validation-for="AnoPublicacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Isbn" class="control-label"></label>
+                <input asp-for="Isbn" class="form-control" />
+                <span asp-validation-for="Isbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumeroPaginas" class="control-label"></label>
+                <input asp-for="NumeroPaginas" class="form-control" />
+                <span asp-validation-for="NumeroPaginas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@

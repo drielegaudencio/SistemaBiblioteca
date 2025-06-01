@@ -10,23 +10,23 @@ using Biblioteca.Models;
 
 namespace Biblioteca.Controllers
 {
-    public class UsuariosController : Controller
+    public class ExemplarsController : Controller
     {
         private readonly BibliotecaDbContext _context;
 
-        public UsuariosController(BibliotecaDbContext context)
+        public ExemplarsController(BibliotecaDbContext context)
         {
             _context = context;
         }
 
-        // GET: Usuarios
+        // GET: Exemplars
         public async Task<IActionResult> Index()
         {
-            var bibliotecaDbContext = _context.Usuarios.Include(u => u.AssinaturaAtual);
+            var bibliotecaDbContext = _context.Exemplares.Include(e => e.Livro);
             return View(await bibliotecaDbContext.ToListAsync());
         }
 
-        // GET: Usuarios/Details/5
+        // GET: Exemplars/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,52 +34,42 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
-                .Include(u => u.AssinaturaAtual)
+            var exemplar = await _context.Exemplares
+                .Include(e => e.Livro)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            if (exemplar == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(exemplar);
         }
 
-        // GET: Usuarios/Create
+        // GET: Exemplars/Create
         public IActionResult Create()
         {
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id");
+            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo");
             return View();
         }
 
-        // POST: Usuarios/Create
+        // POST: Exemplars/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AssinaturaAtualId,Id,Nome,Cpf,Endereco,Telefone,Email")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,LivroId,CodigoInventario,Disponivel")] Exemplar exemplar)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(usuario);
+                _context.Add(exemplar);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-
-            var assinaturaListItems = _context.Assinaturas.Select(u => new SelectListItem
-            {
-                Value = u.Id.ToString(),
-                Text = u.Id.ToString()
-            }).ToList(); // Converte para List<SelectListItem>
-            // Adiciona o item "Selecione" no início da lista
-            assinaturaListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione uma Assinatura" });
-            ViewBag.AssinaturaAtualId = assinaturaListItems;
-            //ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
+            return View(exemplar);
         }
 
-        // GET: Usuarios/Edit/5
+        // GET: Exemplars/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,23 +77,23 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            var exemplar = await _context.Exemplares.FindAsync(id);
+            if (exemplar == null)
             {
                 return NotFound();
             }
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
+            return View(exemplar);
         }
 
-        // POST: Usuarios/Edit/5
+        // POST: Exemplars/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AssinaturaAtualId,Id,Nome,Cpf,Endereco,Telefone,Email")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LivroId,CodigoInventario,Disponivel")] Exemplar exemplar)
         {
-            if (id != usuario.Id)
+            if (id != exemplar.Id)
             {
                 return NotFound();
             }
@@ -112,12 +102,12 @@ namespace Biblioteca.Controllers
             {
                 try
                 {
-                    _context.Update(usuario);
+                    _context.Update(exemplar);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsuarioExists(usuario.Id))
+                    if (!ExemplarExists(exemplar.Id))
                     {
                         return NotFound();
                     }
@@ -128,11 +118,11 @@ namespace Biblioteca.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
+            return View(exemplar);
         }
 
-        // GET: Usuarios/Delete/5
+        // GET: Exemplars/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,35 +130,35 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
-                .Include(u => u.AssinaturaAtual)
+            var exemplar = await _context.Exemplares
+                .Include(e => e.Livro)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            if (exemplar == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(exemplar);
         }
 
-        // POST: Usuarios/Delete/5
+        // POST: Exemplars/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario != null)
+            var exemplar = await _context.Exemplares.FindAsync(id);
+            if (exemplar != null)
             {
-                _context.Usuarios.Remove(usuario);
+                _context.Exemplares.Remove(exemplar);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsuarioExists(int id)
+        private bool ExemplarExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Id == id);
+            return _context.Exemplares.Any(e => e.Id == id);
         }
     }
 }

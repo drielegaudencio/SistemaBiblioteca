@@ -10,23 +10,22 @@ using Biblioteca.Models;
 
 namespace Biblioteca.Controllers
 {
-    public class UsuariosController : Controller
+    public class GenerosController : Controller
     {
         private readonly BibliotecaDbContext _context;
 
-        public UsuariosController(BibliotecaDbContext context)
+        public GenerosController(BibliotecaDbContext context)
         {
             _context = context;
         }
 
-        // GET: Usuarios
+        // GET: Generos
         public async Task<IActionResult> Index()
         {
-            var bibliotecaDbContext = _context.Usuarios.Include(u => u.AssinaturaAtual);
-            return View(await bibliotecaDbContext.ToListAsync());
+            return View(await _context.Generos.ToListAsync());
         }
 
-        // GET: Usuarios/Details/5
+        // GET: Generos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,52 +33,39 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
-                .Include(u => u.AssinaturaAtual)
+            var genero = await _context.Generos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            if (genero == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(genero);
         }
 
-        // GET: Usuarios/Create
+        // GET: Generos/Create
         public IActionResult Create()
         {
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id");
             return View();
         }
 
-        // POST: Usuarios/Create
+        // POST: Generos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AssinaturaAtualId,Id,Nome,Cpf,Endereco,Telefone,Email")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,Nome")] Genero genero)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(usuario);
+                _context.Add(genero);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-
-            var assinaturaListItems = _context.Assinaturas.Select(u => new SelectListItem
-            {
-                Value = u.Id.ToString(),
-                Text = u.Id.ToString()
-            }).ToList(); // Converte para List<SelectListItem>
-            // Adiciona o item "Selecione" no início da lista
-            assinaturaListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione uma Assinatura" });
-            ViewBag.AssinaturaAtualId = assinaturaListItems;
-            //ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            return View(genero);
         }
 
-        // GET: Usuarios/Edit/5
+        // GET: Generos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,23 +73,22 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            var genero = await _context.Generos.FindAsync(id);
+            if (genero == null)
             {
                 return NotFound();
             }
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            return View(genero);
         }
 
-        // POST: Usuarios/Edit/5
+        // POST: Generos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AssinaturaAtualId,Id,Nome,Cpf,Endereco,Telefone,Email")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome")] Genero genero)
         {
-            if (id != usuario.Id)
+            if (id != genero.Id)
             {
                 return NotFound();
             }
@@ -112,12 +97,12 @@ namespace Biblioteca.Controllers
             {
                 try
                 {
-                    _context.Update(usuario);
+                    _context.Update(genero);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsuarioExists(usuario.Id))
+                    if (!GeneroExists(genero.Id))
                     {
                         return NotFound();
                     }
@@ -128,11 +113,10 @@ namespace Biblioteca.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            return View(genero);
         }
 
-        // GET: Usuarios/Delete/5
+        // GET: Generos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,35 +124,34 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
-                .Include(u => u.AssinaturaAtual)
+            var genero = await _context.Generos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            if (genero == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(genero);
         }
 
-        // POST: Usuarios/Delete/5
+        // POST: Generos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario != null)
+            var genero = await _context.Generos.FindAsync(id);
+            if (genero != null)
             {
-                _context.Usuarios.Remove(usuario);
+                _context.Generos.Remove(genero);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsuarioExists(int id)
+        private bool GeneroExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Id == id);
+            return _context.Generos.Any(e => e.Id == id);
         }
     }
 }

@@ -1,65 +1,70 @@
 ﻿@model IEnumerable<Biblioteca.Models.Assinatura>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Listagem";
 }
-
-<h1>Index</h1>
-
+<link rel="stylesheet" href="~/css/_ListStyle.css" />
+<h1>Listagem de Assinaturas</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="add-new">Nova Assinatura</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Usuario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Plano)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FuncionarioResponsavel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataInicio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataFim)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ativa)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Usuario.Cpf)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Plano.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FuncionarioResponsavel.Cpf)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataInicio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataFim)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ativa)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Usuario)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Plano)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.FuncionarioResponsavel)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.DataInicio)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.DataFim)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Ativa)
+                </th>
+                <th scope="col" class="text-right">
+                    <span>Ações</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usuario.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Plano.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FuncionarioResponsavel.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataInicio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataFim)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ativa)
+                    </td>
+                    <td class="text-right">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="action-link edit">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id" class="action-link details">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-link delete">Excluir</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

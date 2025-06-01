@@ -1,0 +1,63 @@
+﻿@model Biblioteca.Models.Emprestimo
+
+@{
+    ViewData["Title"] = "Create";
+}
+<link rel="stylesheet" href="~/css/_FormStyles.css" />
+
+<h2 class="text-3xl font-bold text-gray-800 mb-6">Empréstimo</h2>
+<hr />
+<div class="form-container">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Usuário: </label>
+                <select asp-for="UsuarioId" class ="form-control" asp-items="ViewBag.UsuarioId"></select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Exemplar: </label>
+                <select asp-for="ExemplarId" class ="form-control" asp-items="ViewBag.ExemplarId"></select>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Funcionário Responsável: </label>
+                <select asp-for="FuncionarioResponsavelId" class ="form-control" asp-items="ViewBag.FuncionarioResponsavelId"></select>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Data do Empréstimo: </label>
+                <input asp-for="DataEmprestimo" class="form-control" />
+                <span asp-validation-for="DataEmprestimo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Data de Devolução Prevista: </label>
+                <input asp-for="DataDevolucaoPrevista" class="form-control" />
+                <span asp-validation-for="DataDevolucaoPrevista" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Data da Devolução: </label>
+                <input asp-for="DataDevolucaoReal" class="form-control" />
+                <span asp-validation-for="DataDevolucaoReal" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+                <label asp-for="MultaPaga" class="control-label"></label>
+                <input asp-for="MultaPaga" class="form-control" />
+                <span asp-validation-for="MultaPaga" class="text-danger"></span>
+            </div> *@
+           <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Devolvido" /> @Html.DisplayNameFor(model => model.Devolvido)
+                </label>
+            </div>
+            <div class="form-actions">
+                <a asp-action="Index" class="btn-back">Voltar para a Lista</a>
+                <input type="submit" value="Criar" class="btn-submit" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -50,9 +50,37 @@ namespace Biblioteca.Controllers
         // GET: Assinaturas/Create
         public IActionResult Create()
         {
-            ViewData["FuncionarioResponsavelId"] = new SelectList(_context.Funcionarios, "Id", "Cpf");
-            ViewData["PlanoId"] = new SelectList(_context.Planos, "Id", "Nome");
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Cpf");
+            var usuarioListItems = _context.Usuarios.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Nome
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            usuarioListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Usuário" });
+            ViewBag.UsuarioId = usuarioListItems;
+
+            var funcionarioListItems = _context.Funcionarios.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Nome
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            funcionarioListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Funcionário" });
+            ViewBag.FuncionarioResponsavelId = funcionarioListItems;
+
+
+            var planoListItems = _context.Planos.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Nome
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            planoListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Plano" });
+            ViewBag.PlanoId = planoListItems;
+            //ViewData["FuncionarioResponsavelId"] = new SelectList(_context.Funcionarios, "Id", "Cpf");
+            //ViewData["PlanoId"] = new SelectList(_context.Planos, "Id", "Nome");
+            // ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Cpf");
+            
             return View();
         }
 

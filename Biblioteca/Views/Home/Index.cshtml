@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +6,197 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+ *@
+<style>
+    /* Estilos para o layout do painel */
+    .admin-layout {
+        display: flex;
+        min-height: calc(100vh - 4rem); /* Altura total da viewport menos a altura do header */
+    }
+
+    /* Estilos para a barra lateral */
+    .sidebar {
+        width: 16rem; /* w-64 */
+        background-color: #2D3748; /* Cor de fundo escura para a sidebar (gray-800) */
+        color: #E2E8F0; /* Texto claro (gray-200) */
+        padding: 1.5rem 0; /* py-6 */
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Sombra para destacar */
+    }
+
+        .sidebar h2 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* bold */
+            padding: 0 1.5rem; /* px-6 */
+            margin-bottom: 1.5rem; /* mb-6 */
+            color: #CBD5E0; /* gray-400 */
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar nav li {
+            margin-bottom: 0.25rem; /* Espaçamento entre itens de menu */
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem; /* px-6 py-3 */
+            font-size: 1rem; /* text-base */
+            font-weight: 500; /* font-medium */
+            color: #E2E8F0; /* gray-200 */
+            text-decoration: none;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            border-left: 4px solid transparent; /* Para o indicador de item ativo */
+        }
+
+            .sidebar nav a:hover {
+                background-color: #4A5568; /* gray-700 */
+                color: white;
+            }
+
+            .sidebar nav a.active {
+                background-color: #4A5568; /* gray-700 */
+                color: white;
+                border-left-color: #6366F1; /* indigo-500 */
+            }
+
+            .sidebar nav a svg {
+                margin-right: 0.75rem; /* mr-3 */
+                height: 1.25rem; /* h-5 */
+                width: 1.25rem; /* w-5 */
+            }
+
+    /* Estilos para sub-menus (opções aninhadas) */
+    .submenu {
+        list-style: none;
+        padding-left: 2.5rem; /* Indentação para sub-itens */
+        margin-top: 0.25rem; /* Pequeno espaçamento acima */
+        margin-bottom: 0.5rem; /* Pequeno espaçamento abaixo */
+        display: none; /* Oculta o submenu por padrão */
+    }
+
+        .submenu.active {
+            display: block; /* Mostra o submenu quando ativo */
+        }
+
+        .submenu li a {
+            padding: 0.5rem 1.5rem 0.5rem 3.5rem; /* Ajusta o padding para a indentação */
+            font-size: 0.9rem; /* Um pouco menor que o item pai */
+            color: #CBD5E0; /* gray-400 */
+        }
+
+            .submenu li a:hover {
+                background-color: #2D3748; /* Mantém o fundo da sidebar, mas muda a cor do texto */
+                color: white;
+            }
+
+    /* Estilos para o conteúdo principal */
+    .main-content {
+        flex-grow: 1;
+        padding: 2rem; /* p-8 */
+        background-color: #F7FAFC; /* gray-100 */
+    }
+
+    .welcome-section h1 {
+        font-size: 2.5rem; /* text-4xl */
+        font-weight: 700; /* bold */
+        color: #2D3748; /* gray-800 */
+        margin-bottom: 0.5rem;
+    }
+
+    .welcome-section p {
+        font-size: 1.25rem; /* text-xl */
+        color: #4A5568; /* gray-700 */
+        margin-bottom: 2rem;
+    }
+
+    /* Estilos para a área de "Ferramentas" */
+    .tools-section {
+        margin-top: 2rem;
+    }
+
+        .tools-section h3 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* semibold */
+            color: #2D3748; /* gray-800 */
+            margin-bottom: 1rem;
+        }
+
+    /* Estilos para a área de livros (placeholder) */
+    .books-display {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Colunas responsivas */
+        gap: 1rem; /* Espaçamento entre os itens */
+        margin-top: 2rem;
+    }
+
+    .book-item {
+        background-color: white;
+        border-radius: 0.5rem; /* rounded-lg */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* shadow-md */
+        padding: 0.75rem; /* p-3 */
+        text-align: center;
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .book-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .book-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.25rem; /* rounded */
+            margin-bottom: 0.5rem;
+        }
+
+        .book-item p {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500;
+            color: #2D3748;
+        }
+</style>
+
+@{
+    ViewData["Title"] = "Painel Administrativo";
+}
+
+
+<div class="admin-layout">
+    <main class="main-content">
+        <div class="welcome-section">
+            <h1>SISTEMA BIBLIOTECA</h1>
+            <p>Bem-vindo(a) ao painel de administração da biblioteca.</p>
+        </div>
+
+        <div class="tools-section">
+            <h3>Livros em Destaque</h3>
+            <div class="books-display">
+                <div class="book-item">
+                    <img src="https://placehold.co/100x150/E0E7FF/4338CA?text=Livro+1" alt="Capa do Livro 1">
+                    <p>O Grande Livro</p>
+                </div>
+                <div class="book-item">
+                    <img src="https://placehold.co/100x150/E0E7FF/4338CA?text=Livro+2" alt="Capa do Livro 2">
+                    <p>A História Secreta</p>
+                </div>
+                <div class="book-item">
+                    <img src="https://placehold.co/100x150/E0E7FF/4338CA?text=Livro+3" alt="Capa do Livro 3">
+                    <p>Aventura na Floresta</p>
+                </div>
+                <div class="book-item">
+                    <img src="https://placehold.co/100x150/E0E7FF/4338CA?text=Livro+4" alt="Capa do Livro 4">
+                    <p>O Código Antigo</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+}

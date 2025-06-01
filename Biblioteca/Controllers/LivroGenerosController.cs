@@ -10,23 +10,23 @@ using Biblioteca.Models;
 
 namespace Biblioteca.Controllers
 {
-    public class UsuariosController : Controller
+    public class LivroGenerosController : Controller
     {
         private readonly BibliotecaDbContext _context;
 
-        public UsuariosController(BibliotecaDbContext context)
+        public LivroGenerosController(BibliotecaDbContext context)
         {
             _context = context;
         }
 
-        // GET: Usuarios
+        // GET: LivroGeneros
         public async Task<IActionResult> Index()
         {
-            var bibliotecaDbContext = _context.Usuarios.Include(u => u.AssinaturaAtual);
+            var bibliotecaDbContext = _context.LivroGeneros.Include(l => l.Genero).Include(l => l.Livro);
             return View(await bibliotecaDbContext.ToListAsync());
         }
 
-        // GET: Usuarios/Details/5
+        // GET: LivroGeneros/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,52 +34,45 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
-                .Include(u => u.AssinaturaAtual)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            var livroGenero = await _context.LivroGeneros
+                .Include(l => l.Genero)
+                .Include(l => l.Livro)
+                .FirstOrDefaultAsync(m => m.LivroId == id);
+            if (livroGenero == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(livroGenero);
         }
 
-        // GET: Usuarios/Create
+        // GET: LivroGeneros/Create
         public IActionResult Create()
         {
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id");
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "Id", "Nome");
+            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo");
             return View();
         }
 
-        // POST: Usuarios/Create
+        // POST: LivroGeneros/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AssinaturaAtualId,Id,Nome,Cpf,Endereco,Telefone,Email")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("LivroId,GeneroId")] LivroGenero livroGenero)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(usuario);
+                _context.Add(livroGenero);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-
-            var assinaturaListItems = _context.Assinaturas.Select(u => new SelectListItem
-            {
-                Value = u.Id.ToString(),
-                Text = u.Id.ToString()
-            }).ToList(); // Converte para List<SelectListItem>
-            // Adiciona o item "Selecione" no início da lista
-            assinaturaListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione uma Assinatura" });
-            ViewBag.AssinaturaAtualId = assinaturaListItems;
-            //ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "Id", "Nome", livroGenero.GeneroId);
+            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", livroGenero.LivroId);
+            return View(livroGenero);
         }
 
-        // GET: Usuarios/Edit/5
+        // GET: LivroGeneros/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,23 +80,24 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            var livroGenero = await _context.LivroGeneros.FindAsync(id);
+            if (livroGenero == null)
             {
                 return NotFound();
             }
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "Id", "Nome", livroGenero.GeneroId);
+            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", livroGenero.LivroId);
+            return View(livroGenero);
         }
 
-        // POST: Usuarios/Edit/5
+        // POST: LivroGeneros/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AssinaturaAtualId,Id,Nome,Cpf,Endereco,Telefone,Email")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("LivroId,GeneroId")] LivroGenero livroGenero)
         {
-            if (id != usuario.Id)
+            if (id != livroGenero.LivroId)
             {
                 return NotFound();
             }
@@ -112,12 +106,12 @@ namespace Biblioteca.Controllers
             {
                 try
                 {
-                    _context.Update(usuario);
+                    _context.Update(livroGenero);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsuarioExists(usuario.Id))
+                    if (!LivroGeneroExists(livroGenero.LivroId))
                     {
                         return NotFound();
                     }
@@ -128,11 +122,12 @@ namespace Biblioteca.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssinaturaAtualId"] = new SelectList(_context.Assinaturas, "Id", "Id", usuario.AssinaturaAtualId);
-            return View(usuario);
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "Id", "Nome", livroGenero.GeneroId);
+            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", livroGenero.LivroId);
+            return View(livroGenero);
         }
 
-        // GET: Usuarios/Delete/5
+        // GET: LivroGeneros/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,35 +135,36 @@ namespace Biblioteca.Controllers
                 return NotFound();
             }
 
-            var usuario = await _context.Usuarios
-                .Include(u => u.AssinaturaAtual)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            var livroGenero = await _context.LivroGeneros
+                .Include(l => l.Genero)
+                .Include(l => l.Livro)
+                .FirstOrDefaultAsync(m => m.LivroId == id);
+            if (livroGenero == null)
             {
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(livroGenero);
         }
 
-        // POST: Usuarios/Delete/5
+        // POST: LivroGeneros/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario != null)
+            var livroGenero = await _context.LivroGeneros.FindAsync(id);
+            if (livroGenero != null)
             {
-                _context.Usuarios.Remove(usuario);
+                _context.LivroGeneros.Remove(livroGenero);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsuarioExists(int id)
+        private bool LivroGeneroExists(int id)
         {
-            return _context.Usuarios.Any(e => e.Id == id);
+            return _context.LivroGeneros.Any(e => e.LivroId == id);
         }
     }
 }

@@ -3,34 +3,32 @@
 @{
     ViewData["Title"] = "Create";
 }
-
-<h1>Create</h1>
-
-<h4>Assinatura</h4>
+<link rel="stylesheet" href="~/css/_FormStyles.css" />
+<h2 class="text-3xl font-bold text-gray-800 mb-6">Nova Assinatura</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="form-container">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
+                <label class="control-label">Usuário:</label>
                 <select asp-for="UsuarioId" class ="form-control" asp-items="ViewBag.UsuarioId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="PlanoId" class="control-label"></label>
+                <label  class="control-label">Plano: </label>
                 <select asp-for="PlanoId" class ="form-control" asp-items="ViewBag.PlanoId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="FuncionarioResponsavelId" class="control-label"></label>
+                <label  class="control-label">Funcionário Responsável:</label>
                 <select asp-for="FuncionarioResponsavelId" class ="form-control" asp-items="ViewBag.FuncionarioResponsavelId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="DataInicio" class="control-label"></label>
+                <label  class="control-label">Data Início da Assinatura:</label>
                 <input asp-for="DataInicio" class="form-control" />
                 <span asp-validation-for="DataInicio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DataFim" class="control-label"></label>
+                <label  class="control-label">Data Fim da Assinatura:</label>
                 <input asp-for="DataFim" class="form-control" />
                 <span asp-validation-for="DataFim" class="text-danger"></span>
             </div>
@@ -39,16 +37,15 @@
                     <input class="form-check-input" asp-for="Ativa" /> @Html.DisplayNameFor(model => model.Ativa)
                 </label>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-actions">
+                <a asp-action="Index" class="btn-back">Voltar para a Lista</a>
+                <input type="submit" value="Criar" class="btn-submit" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
