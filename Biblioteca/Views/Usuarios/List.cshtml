@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Biblioteca.Models.Usuario>
+
+@{
+    ViewData["Title"] = "List";
+}
+<link rel="stylesheet" href="~/css/_ListStyle.css" />
+<h1>Listagem de Usuários</h1>
+
+<p>
+    <a asp-action="Create" class="add-new">Adicionar Novo Usuário</a>
+</p>
+<div class="container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.AssinaturaAtual)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cpf)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Endereco)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Telefone)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th scope="col" class="text-right">
+                    <span>Ações</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssinaturaAtual.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cpf)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Endereco)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Telefone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td class="text-right">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="action-link edit">Editar</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="action-link details">Detalhes</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="action-link delete">Excluir</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="fixed-bottom-right">
+        <a asp-action="Index" class="btn-back">
+            Voltar
+        </a>
+    </div>
+</div>

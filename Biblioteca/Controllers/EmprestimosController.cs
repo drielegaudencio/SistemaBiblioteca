@@ -62,7 +62,7 @@ namespace Biblioteca.Controllers
             var exemplarListItems = _context.Exemplares.Select(u => new SelectListItem
             {
                 Value = u.Id.ToString(),
-                Text = u.Livro.ToString()
+                Text = u.Livro.Titulo.ToString()
             }).ToList(); // Converte para List<SelectListItem>
             // Adiciona o item "Selecione" no início da lista
             exemplarListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione o Livro" });
@@ -96,9 +96,36 @@ namespace Biblioteca.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ExemplarId"] = new SelectList(_context.Exemplares, "Id", "CodigoInventario", emprestimo.ExemplarId);
-            ViewData["FuncionarioResponsavelId"] = new SelectList(_context.Funcionarios, "Id", "Cpf", emprestimo.FuncionarioResponsavelId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Cpf", emprestimo.UsuarioId);
+            var usuarioListItems = _context.Usuarios.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Nome
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            usuarioListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione o Usuário" });
+            ViewBag.UsuarioId = usuarioListItems;
+
+            var exemplarListItems = _context.Exemplares.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Livro.Titulo.ToString()
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            exemplarListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione o Livro" });
+            ViewBag.ExemplarId = exemplarListItems;
+
+            var funcionarioListItems = _context.Funcionarios.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Nome
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            funcionarioListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Funcionário" });
+            ViewBag.FuncionarioResponsavelId = funcionarioListItems;
+
+            //ViewData["ExemplarId"] = new SelectList(_context.Exemplares, "Id", "CodigoInventario", emprestimo.ExemplarId);
+            //ViewData["FuncionarioResponsavelId"] = new SelectList(_context.Funcionarios, "Id", "Cpf", emprestimo.FuncionarioResponsavelId);
+            //ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Cpf", emprestimo.UsuarioId);
             return View(emprestimo);
         }
 
@@ -115,7 +142,15 @@ namespace Biblioteca.Controllers
             {
                 return NotFound();
             }
-            ViewData["ExemplarId"] = new SelectList(_context.Exemplares, "Id", "CodigoInventario", emprestimo.ExemplarId);
+            var livroItems = _context.Exemplares.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Livro.Titulo
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            livroItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Livro" });
+            ViewBag.ExemplarId = livroItems;
+            //ViewData["ExemplarId"] = new SelectList(_context.Exemplares, "Id", "CodigoInventario", emprestimo.ExemplarId);
             ViewData["FuncionarioResponsavelId"] = new SelectList(_context.Funcionarios, "Id", "Cpf", emprestimo.FuncionarioResponsavelId);
             ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Cpf", emprestimo.UsuarioId);
             return View(emprestimo);

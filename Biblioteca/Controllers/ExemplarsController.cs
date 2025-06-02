@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Biblioteca.Data;
 using Biblioteca.Models;
+using Biblioteca.Services;
+using System.Text.RegularExpressions;
 
 namespace Biblioteca.Controllers
 {
@@ -14,10 +16,14 @@ namespace Biblioteca.Controllers
     {
         private readonly BibliotecaDbContext _context;
 
-        public ExemplarsController(BibliotecaDbContext context)
+        private readonly OpenLibraryService _openLibraryService;
+
+        public ExemplarsController(BibliotecaDbContext context, OpenLibraryService openLibraryService)
         {
             _context = context;
+            _openLibraryService = openLibraryService;
         }
+
 
         // GET: Exemplars
         public async Task<IActionResult> Index()
@@ -48,7 +54,15 @@ namespace Biblioteca.Controllers
         // GET: Exemplars/Create
         public IActionResult Create()
         {
-            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo");
+            var livroItems = _context.Livros.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Titulo
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            livroItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Livro" });
+            ViewBag.LivroId = livroItems;
+            //ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo");
             return View();
         }
 
@@ -59,13 +73,30 @@ namespace Biblioteca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,LivroId,CodigoInventario,Disponivel")] Exemplar exemplar)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(exemplar);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(exemplar);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                var livroItems = _context.Livros.Select(u => new SelectListItem
+                {
+                    Value = u.Id.ToString(),
+                    Text = u.Titulo
+                }).ToList(); // Converte para List<SelectListItem>
+                             // Adiciona o item "Selecione" no início da lista
+                livroItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Livro" });
+                ViewBag.LivroId = livroItems;
+                //ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
             }
-            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", "Não foi possivel inserir os dados");
+            }
+
             return View(exemplar);
         }
 
@@ -82,7 +113,15 @@ namespace Biblioteca.Controllers
             {
                 return NotFound();
             }
-            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
+            var livroItems = _context.Livros.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Titulo
+            }).ToList(); // Converte para List<SelectListItem>
+                         // Adiciona o item "Selecione" no início da lista
+            livroItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Livro" });
+            ViewBag.LivroId = livroItems;
+            //ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
             return View(exemplar);
         }
 
@@ -118,7 +157,15 @@ namespace Biblioteca.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
+            var livroItems = _context.Livros.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Titulo
+            }).ToList(); // Converte para List<SelectListItem>
+                         // Adiciona o item "Selecione" no início da lista
+            livroItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Livro" });
+            ViewBag.LivroId = livroItems;
+            //ViewData["LivroId"] = new SelectList(_context.Livros, "Id", "Titulo", exemplar.LivroId);
             return View(exemplar);
         }
 
@@ -160,5 +207,6 @@ namespace Biblioteca.Controllers
         {
             return _context.Exemplares.Any(e => e.Id == id);
         }
+    
     }
 }

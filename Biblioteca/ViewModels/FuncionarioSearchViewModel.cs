@@ -12,8 +12,7 @@ namespace Biblioteca.ViewModels
         // Lista de Assinaturas Realizadas (Nome da propriedade corrigido)
         public List<AssinaturaViewModel>? AssinaturasRealizadas { get; set; }
 
-        // Removido EmpréstimosViewModel conforme a nova requisição de focar apenas em assinaturas
-        // public List<EmprestimoViewModel>? EmprestimosRealizados { set; }
+        public List<EmprestimoViewModel>? EmprestimosRealizados { get;  set; }
     }
 
     public class FuncionarioViewModel
@@ -32,31 +31,26 @@ namespace Biblioteca.ViewModels
     public class AssinaturaViewModel
     {
         public int Id { get; set; }
-        // Não é necessário FuncionarioResponsavelId, UsuarioId, PlanoId aqui para exibição simples
-        // public int FuncionarioResponsavelId { get; set; }
-        // public int UsuarioId { get; set; }
-        // public int PlanoId { get; set; }
-
         // Propriedades para exibir o nome do usuário e o tipo de plano
         public string NomeUsuario { get; set; } = string.Empty;
-        public string TipoPlano { get; set; } = string.Empty;
+        public string Plano { get; set; } = string.Empty;
 
         public string DataInicio { get; set; } = string.Empty;
         public string DataFim { get; set; } = string.Empty;
         public bool Ativa { get; set; }
-        // ValorCobrado REMOVIDO daqui pois está comentado no seu modelo Assinatura.cs
-        // public decimal ValorCobrado { get; set; }
+        
     }
 
-    // EmprestimoViewModel não é mais necessário para este cenário de busca de funcionário focado em assinaturas
-    // public class EmprestimoViewModel
-    // {
-    //     public int Id { get; set; }
-    //     public string TituloLivro { get; set; } = string.Empty;
-    //     public string IsbnLivro { get; set; } = string.Empty;
-    //     public string DataEmprestimo { get; set; } = string.Empty;
-    //     public string DataDevolucaoPrevista { get; set; } = string.Empty;
-    //     public string DataDevolucaoReal { get; set; } = string.Empty;
-    //     public bool Devolvido { get; set; }
-    // }
+    
+     public class EmprestimoViewModel
+     {
+         public int Id { get; set; }
+        public string NomeUsuario { get; set; } = string.Empty;
+        public string TituloLivro { get; set; } = string.Empty;
+         public string IsbnLivro { get; set; } = string.Empty;
+         public string DataEmprestimo { get; set; } = string.Empty;
+         public string DataDevolucaoPrevista { get; set; } = string.Empty;
+         public string DataDevolucaoReal { get; set; } = string.Empty;
+         public bool Devolvido { get; set; }
+     }
 }

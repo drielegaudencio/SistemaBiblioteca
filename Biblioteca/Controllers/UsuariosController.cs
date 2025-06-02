@@ -26,6 +26,12 @@ namespace Biblioteca.Controllers
             return View(await bibliotecaDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> List()
+        {
+            var bibliotecaDbContext = _context.Usuarios.Include(u => u.AssinaturaAtual);
+            return View(await bibliotecaDbContext.ToListAsync());
+        }
+
         // GET: Usuarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {

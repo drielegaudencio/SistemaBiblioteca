@@ -249,3 +249,298 @@
     color: var(--text-gray-700);
     font-style: italic;
 }
+/* Estilos para os itens dentro das listas (assinaturas, empréstimos) */
+.item-card {
+    background-color: white;
+    border: 1px solid var(--bg-gray-100);
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+    .item-card:last-child {
+        margin-bottom: 0;
+    }
+
+/* Cores de status */
+.text-green-600 {
+    color: var(--green-600);
+    font-weight: 500;
+}
+
+.text-red-600 {
+    color: var(--red-600);
+    font-weight: 500;
+}
+
+.text-orange-600 {
+    color: var(--orange-600);
+    font-weight: 500;
+}
+
+/* Estilo para botão de "Voltar" */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-gray-300);
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-gray-700);
+    background-color: white;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .btn-back:hover {
+        background-color: var(--bg-gray-50); /* gray-50 */
+    }
+
+    .btn-back:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+    }
+
+/* Layout dos botões no final do formulário */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem; /* space-x-3 */
+    margin-top: 1.5rem; /* mt-6 */
+}
+
+/* --- Novos estilos para o layout de duas colunas (Livro Create) --- */
+.two-column-layout {
+    display: flex;
+    flex-wrap: wrap; /* Permite que as colunas quebrem em telas menores */
+    gap: 2rem; /* Espaço entre as colunas */
+    align-items: flex-start; /* Alinha o topo das colunas */
+}
+
+.column-left {
+    flex: 1; /* Ocupa o espaço restante */
+    min-width: 20rem; /* Largura mínima para evitar que encolha demais */
+}
+
+.column-right {
+    flex: 1; /* Ocupa o espaço restante */
+    min-width: 20rem; /* Largura mínima */
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.search-section h2 {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 600; /* semibold */
+    color: var(--text-gray-900);
+    margin-bottom: 1rem;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 0.5rem; /* Espaço entre input e botão */
+    margin-bottom: 1rem;
+    align-items: flex-end; /* Alinha o botão e o input */
+}
+
+    .search-input-group .form-control { /* Reutiliza o estilo do input de formulário */
+        flex-grow: 1;
+    }
+
+.search-button-custom { /* Para o botão de busca da Open Library */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: white;
+    background-color: var(--primary-indigo);
+    transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+    .search-button-custom:hover {
+        background-color: var(--primary-indigo-dark);
+    }
+
+    .search-button-custom:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+    }
+
+.results-viewer { /* Para o visor de resultados da Open Library */
+    margin-top: 1.5rem;
+    max-height: 400px; /* Altura máxima para o scroll */
+    overflow-y: auto; /* Adiciona barra de rolagem vertical */
+    border: 1px solid var(--border-gray-300);
+    border-radius: 0.375rem;
+    padding: 1rem;
+    background-color: var(--bg-gray-50);
+}
+
+    .results-viewer .book-result-item {
+        background-color: white;
+        border-radius: 0.375rem;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+        .results-viewer .book-result-item:hover {
+            background-color: #F0F4FF; /* indigo-50 light */
+            transform: translateY(-2px);
+        }
+
+        .results-viewer .book-result-item h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .results-viewer .book-result-item p {
+            font-size: 0.875rem;
+            color: var(--text-gray-700);
+            margin-bottom: 0.25rem;
+        }
+
+            .results-viewer .book-result-item p:last-child {
+                margin-bottom: 0;
+            }
+
+.loading-indicator {
+    text-align: center;
+    padding: 1rem;
+    color: var(--text-gray-700);
+    font-style: italic;
+}
+
+/* --- Novos estilos para a página de Busca de Funcionário --- */
+.search-page-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    max-width: 960px; /* Largura máxima para centralizar e organizar */
+    margin: 2rem auto; /* Centraliza na página */
+}
+
+.search-form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-gray-300);
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 3 colunas responsivas */
+    gap: 1.5rem; /* Espaçamento entre as caixas */
+}
+
+.results-box {
+    border: 1px solid var(--border-gray-300);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: var(--bg-gray-50);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column; /* Para que o conteúdo se expanda e o scroll funcione */
+}
+
+    .results-box h3 {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 600;
+        color: var(--text-gray-900);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-gray-300);
+    }
+
+.results-content {
+    flex-grow: 1; /* Permite que o conteúdo preencha o espaço disponível */
+    max-height: 250px; /* Altura máxima para o scroll */
+    overflow-y: auto; /* Adiciona barra de rolagem */
+    padding-right: 0.5rem; /* Para evitar que o scrollbar "corte" o texto */
+}
+
+    .results-content p {
+        font-size: 0.9rem;
+        color: var(--text-gray-700);
+        margin-bottom: 0.5rem;
+    }
+
+        .results-content p:last-child {
+            margin-bottom: 0;
+        }
+
+/* Estilos para os itens dentro das listas (assinaturas, empréstimos) */
+.item-card {
+    background-color: white;
+    border: 1px solid var(--bg-gray-100);
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+    .item-card:last-child {
+        margin-bottom: 0;
+    }
+
+/* Cores de status */
+.text-green-600 {
+    color: var(--green-600);
+    font-weight: 500;
+}
+
+.text-red-600 {
+    color: var(--red-600);
+    font-weight: 500;
+}
+
+.text-orange-600 {
+    color: var(--orange-600);
+    font-weight: 500;
+}
+
+/* Estilo para o botão fixo no canto inferior direito */
+.fixed-bottom-right {
+    position: fixed; /* Fixa o elemento na tela */
+    bottom: 1.5rem; /* Distância da parte inferior */
+    right: 1.5rem; /* Distância da parte direita */
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+
+
+/* Estilo para os links de navegação adicionais */
+.nav-links-secondary a {
+    color: var(--primary-indigo);
+    font-weight: 500; /* Corrigido para font-medium */
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    margin-bottom: 0.5rem; /* Espaçamento entre os links */
+    display: block; /* Para que cada link ocupe uma linha */
+}
+
+    .nav-links-secondary a:hover {
+        color: var(--primary-indigo-darker);
+        text-decoration: underline;
+    }
+
+.nav-links-secondary svg {
+    margin-right: 0.5rem; /* Espaçamento entre ícone e texto */
+    display: inline-block;
+    vertical-align: middle;
+    height: 1rem; /* Ajustado para h-4 (16px) */
+    width: 1rem; /* Ajustado para w-4 (16px) */
+}

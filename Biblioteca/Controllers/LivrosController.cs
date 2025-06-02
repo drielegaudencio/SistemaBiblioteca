@@ -7,7 +7,9 @@ using Biblioteca.Services;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic; // Para List
-using System.Text.RegularExpressions; // Para Regex.IsMatch
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Biblioteca.ViewModels; // Para Regex.IsMatch
 
 namespace Biblioteca.Controllers
 {
@@ -25,6 +27,15 @@ namespace Biblioteca.Controllers
         // GET: Livros
         // Exibe a lista de todos os livros
         public async Task<IActionResult> Index()
+        {
+            // Carrega os livros e inclui os LivroGeneros e Generos associados
+            var livros = await _context.Livros
+                                       .Include(l => l.LivroGeneros)
+                                           .ThenInclude(lg => lg.Genero)
+                                       .ToListAsync();
+            return View(livros);
+        }
+        public async Task<IActionResult> List()
         {
             // Carrega os livros e inclui os LivroGeneros e Generos associados
             var livros = await _context.Livros
@@ -60,6 +71,25 @@ namespace Biblioteca.Controllers
         // Exibe o formulário para criar um novo livro
         public IActionResult Create()
         {
+            /*var viewModel = new LivroViewModel();
+            // Popula a lista de gêneros disponíveis para a View
+            viewModel.AvailableGenres = await _context.Generos
+                                                    .Select(g => new SelectListItem
+                                                    {
+                                                        Value = g.Id.ToString(),
+                                                        Text = g.Nome
+                                                    })
+                                                    .ToListAsync();
+            return View(viewModel);
+*/
+            var generoListItems = _context.Generos.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Nome
+            }).ToList(); // Converte para List<SelectListItem>
+            // Adiciona o item "Selecione" no início da lista
+            generoListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Gênero" });
+            ViewBag.GeneroPrincipal = generoListItems;
             return View();
         }
 
@@ -67,12 +97,33 @@ namespace Biblioteca.Controllers
         // Processa o envio do formulário para criar um novo livro
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Titulo,Autor,GeneroPrincipal,AnoPublicacao,Isbn,NumeroPaginas")] Livro livro)
+        public async Task<IActionResult> Create(LivroViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                var livro = new Livro
+                {
+                    Titulo = viewModel.Titulo,
+                    Autor = viewModel.Autor,
+                    Isbn = viewModel.Isbn,
+                    AnoPublicacao = viewModel.AnoPublicacao,
+                    NumeroPaginas = viewModel.NumeroPaginas,
+                    GeneroPrincipal = viewModel.GeneroPrincipal, // Mantenha se ainda usar um 'principal'
+                    // Outras propriedades do Livro que não sejam coleções de navegação
+                };
+
+                var generoListItems = _context.Generos.Select(u => new SelectListItem
+                {
+                    Value = u.Id.ToString(),
+                    Text = u.Nome
+                }).ToList(); // Converte para List<SelectListItem>
+                             // Adiciona o item "Selecione" no início da lista
+                generoListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Gênero" });
+                ViewBag.GeneroPrincipal = generoListItems;
+
                 // A lógica de preenchimento automático do formulário pela API agora será mais controlada pelo JS na View.
                 // Esta parte do código ainda pode ser útil para uma validação final ou para preencher se o ISBN for digitado manualmente.
+
                 if (!string.IsNullOrWhiteSpace(livro.Isbn) && string.IsNullOrWhiteSpace(livro.Titulo))
                 {
                     var openLibraryData = await _openLibraryService.GetBookByIsbn(livro.Isbn);
@@ -97,12 +148,34 @@ namespace Biblioteca.Controllers
                         }
                     }
                 }
-
                 _context.Add(livro);
                 await _context.SaveChangesAsync();
+                // Agora, salve as relações LivroGenero
+                if (viewModel.SelectedGenreIds != null && viewModel.SelectedGenreIds.Any())
+                {
+                    foreach (var generoId in viewModel.SelectedGenreIds)
+                    {
+                        var livroGenero = new LivroGenero
+                        {
+                            LivroId = livro.Id, // Usa o ID do livro recém-salvo
+                            GeneroId = generoId
+                        };
+                        _context.LivroGeneros.Add(livroGenero);
+                    }
+                    await _context.SaveChangesAsync(); // Salva as relações
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(livro);
+            // Se o ModelState não for válido, repopula a lista de gêneros para a View
+            viewModel.AvailableGenres = await _context.Generos
+                                                    .Select(g => new SelectListItem
+                                                    {
+                                                        Value = g.Id.ToString(),
+                                                        Text = g.Nome
+                                                    })
+                                                    .ToListAsync();
+            return View(viewModel);
         }
 
         // GET: Livros/Edit/5

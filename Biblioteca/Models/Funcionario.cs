@@ -22,10 +22,10 @@ namespace Biblioteca.Models
         public ICollection<Assinatura>? AssinaturasRealizadas { get; set; } // Assinaturas que este funcionário registrou
         public ICollection<Emprestimo>? EmprestimosRealizados { get; set; } // Empréstimos que este funcionário registrou
     }
-    public class BibliotecaContext : DbContext
+    /*public class BibliotecaContext : DbContext
     {
         public BibliotecaContext(DbContextOptions<BibliotecaContext> options) : base(options) { }
         public DbSet<Biblioteca.Models.Funcionario> Funcionario { get; set; }
 
-    }
+    }*/
 }

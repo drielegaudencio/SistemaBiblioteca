@@ -11,17 +11,17 @@ namespace Biblioteca.Models
         [Required(ErrorMessage = "O usuário do empréstimo é obrigatório.")]
         public int UsuarioId { get; set; }
         [ForeignKey("UsuarioId")]
-        public required Usuario Usuario { get; set; } // Propriedade de navegação para o Usuário
+        public Usuario? Usuario { get; set; } // Propriedade de navegação para o Usuário
 
         [Required(ErrorMessage = "O exemplar emprestado é obrigatório.")]
         public int ExemplarId { get; set; }
         [ForeignKey("ExemplarId")]
-        public required Exemplar Exemplar { get; set; } // Propriedade de navegação para o Exemplar
+        public Exemplar? Exemplar { get; set; } // Propriedade de navegação para o Exemplar
 
         [Required(ErrorMessage = "O funcionário responsável é obrigatório.")]
         public int FuncionarioResponsavelId { get; set; }
         [ForeignKey("FuncionarioResponsavelId")]
-        public required Funcionario FuncionarioResponsavel { get; set; } // Propriedade de navegação para o Funcionário
+        public Funcionario? FuncionarioResponsavel { get; set; } // Propriedade de navegação para o Funcionário
 
         [Required(ErrorMessage = "A data do empréstimo é obrigatória.")]
         [DataType(DataType.Date)]

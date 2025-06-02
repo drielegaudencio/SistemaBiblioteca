@@ -11,7 +11,7 @@ namespace Biblioteca.Models
         [Required(ErrorMessage = "O livro associado é obrigatório.")]
         public int LivroId { get; set; }
         [ForeignKey("LivroId")]
-        public required Livro Livro { get; set; } // Propriedade de navegação para o Livro (obra)
+        public Livro? Livro { get; set; } // Propriedade de navegação para o Livro (obra)
 
         [Required(ErrorMessage = "O código de inventário é obrigatório.")]
         [StringLength(50, ErrorMessage = "O código de inventário não pode exceder 50 caracteres.")]

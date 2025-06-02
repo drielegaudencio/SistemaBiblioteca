@@ -3,19 +3,19 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
+<link rel="stylesheet" href="~/css/_ListStyle.css" />
+<h1>Listagem de Gênero</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="add-new">Adicionar Novo</a>
 </p>
-<table class="table">
+<table class="data-table">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
-            <th></th>
+            <th scope="col"> Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -24,11 +24,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                <td class="text-right">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-link edit">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="action-link details">Detalhes</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-link delete">Excluir</a>
+                </td>
         </tr>
 }
     </tbody>

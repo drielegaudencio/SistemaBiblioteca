@@ -32,6 +32,7 @@ namespace Biblioteca.Controllers
 
         public async Task<IActionResult> List()
         {
+            var bibliotecaDbContext = _context.Funcionarios.Include(u => u.Id);
             return View(await _context.Funcionarios.ToListAsync());
         }
 
@@ -259,10 +260,26 @@ namespace Biblioteca.Controllers
                     {
                         Id = a.Id,
                         NomeUsuario = a.Usuario?.Nome ?? "Usuário Desconhecido", // Nome do usuário da assinatura
-                        TipoPlano = a.Plano?.Nome ?? "Plano Desconhecido", // Nome do plano
+                        Plano = a.Plano?.Nome ?? "Plano Desconhecido", // Nome do plano
                         DataInicio = a.DataInicio.ToString("dd/MM/yyyy"),
                         DataFim = a.DataFim?.ToString("dd/MM/yyyy") ?? "Indefinida",
                         Ativa = a.Ativa,
+                        // ValorCobrado REMOVIDO pois está comentado no seu modelo Assinatura.cs
+                        // Se você descomentar ValorCobrado em Assinatura.cs, você pode adicioná-lo aqui.
+                        // ValorCobrado = a.ValorCobrado
+                    }).ToList(),
+                EmprestimosRealizados = funcionario.EmprestimosRealizados?
+                    .OrderByDescending(a => a.DataEmprestimo) // Ordena as assinaturas pela data mais recente
+                    .Select(a => new EmprestimoViewModel
+                    {
+                        Id = a.Id,
+                        NomeUsuario = a.Usuario?.Nome ?? "Usuário Desconhecido", // Nome do usuário da assinatura
+                        TituloLivro = a.Exemplar?.Livro.Titulo ?? "Titulo Desconhecido", // Nome do plano
+                        IsbnLivro = a.Exemplar?.Livro.Isbn ?? "ISBN Desconhecido",
+                        DataEmprestimo = a.DataEmprestimo.ToString("dd/MM/yyyy"),
+                        DataDevolucaoPrevista = a.DataDevolucaoPrevista.ToString("dd/MM/yyyy"),
+                        DataDevolucaoReal = a.DataDevolucaoReal?.ToString("dd/MM/yyyy") ?? "Indefinida",
+                        Devolvido = a.Devolvido,
                         // ValorCobrado REMOVIDO pois está comentado no seu modelo Assinatura.cs
                         // Se você descomentar ValorCobrado em Assinatura.cs, você pode adicioná-lo aqui.
                         // ValorCobrado = a.ValorCobrado

@@ -198,3 +198,11 @@ h1 {
     height: 1rem; /* Ajustado para h-4 (16px) */
     width: 1rem; /* Ajustado para w-4 (16px) */
 }
+
+/* Estilo para o botão fixo no canto inferior direito */
+.fixed-bottom-right {
+    position: fixed; /* Fixa o elemento na tela */
+    bottom: 1.5rem; /* Distância da parte inferior */
+    right: 1.5rem; /* Distância da parte direita */
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}

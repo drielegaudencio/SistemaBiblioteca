@@ -12,10 +12,10 @@ namespace Biblioteca.Models
     {
         public int LivroId { get; set; }
         [ForeignKey("LivroId")]
-        public required Livro Livro { get; set; }
+        public  Livro? Livro { get; set; }
 
         public int GeneroId { get; set; }
         [ForeignKey("GeneroId")]
-        public required Genero Genero { get; set; }
+        public  Genero? Genero { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace Biblioteca.Data
                 context.SaveChanges();
 
             }
-            if (context.Planos.Any())
+            /*if (context.Planos.Any())
             {
                 return ;
             }
@@ -44,18 +44,24 @@ namespace Biblioteca.Data
                     Id= 2
                 }
             };
-            
-            if (context.Assinaturas.Any())
+*/
+            if (context.Exemplares.Any())
             {
-                return ;
+                return;
             }
-            var assinaturas = new Assinatura[]
+            var exemplares = new Exemplar[]
             {
-                new Assinatura
-                {
-                    Ativa=true, DataInicio= DateTime.Today, PlanoId= 1,UsuarioId= 1, FuncionarioResponsavelId = 1,Id= 2
+                new Exemplar {
+                   Id=1 ,LivroId= 1, CodigoInventario="5641",Disponivel=true
                 }
+
             };
+            foreach (Exemplar exemplar in exemplares)
+            {
+                context.Exemplares.Add(exemplar);
+                context.SaveChanges();
+
+            }
 
         }
 
