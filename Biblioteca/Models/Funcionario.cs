@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.Models
 {
@@ -19,5 +21,11 @@ namespace Biblioteca.Models
         // Propriedades de navegação para relacionamentos
         public ICollection<Assinatura>? AssinaturasRealizadas { get; set; } // Assinaturas que este funcionário registrou
         public ICollection<Emprestimo>? EmprestimosRealizados { get; set; } // Empréstimos que este funcionário registrou
+    }
+    public class BibliotecaContext : DbContext
+    {
+        public BibliotecaContext(DbContextOptions<BibliotecaContext> options) : base(options) { }
+        public DbSet<Biblioteca.Models.Funcionario> Funcionario { get; set; }
+
     }
 }

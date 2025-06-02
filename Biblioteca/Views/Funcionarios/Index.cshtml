@@ -213,16 +213,17 @@
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             Adicionar Novo Funcionário
         </a>
-        <a href="#" class="flex items-center" onclick="alert('Funcionalidade de Pesquisa ainda não implementada para esta página. Use o campo de busca abaixo.'); return false;">
+        <a asp-action="Search" class="btn-back">
+        @* <a href="#" class="flex items-center" onclick="alert('Funcionalidade de Pesquisa ainda não implementada para esta página. Use o campo de busca abaixo.'); return false;"> *@
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             Pesquisar Funcionário
         </a>
     </div>
 
-    <div class="search-container ml-auto">
-        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome ou CPF..." />
-        <button type="button" class="search-button" onclick="performSearch()">Buscar</button>
-    </div>
+    @* <div class="search-container ml-auto"> *@
+    @*     <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nome ou CPF..." /> *@
+    @*     <button type="button" class="search-button" onclick="performSearch()">Buscar</button> *@
+    @* </div> *@
 </div>
 @* 
 <div class="table-container">

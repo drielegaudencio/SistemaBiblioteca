@@ -1,0 +1,153 @@
+﻿@model Biblioteca.ViewModels.FuncionarioSearchResultViewModel
+
+@{
+    ViewData["Title"] = "Buscar Funcionário";
+}
+
+<h1 class="form-page-title">Buscar Funcionário</h1>
+
+<div class="search-page-container">
+    <div class="search-form-section">
+        <label for="searchFuncionarioInput" class="control-label">Pesquisar por Nome ou Matrícula:</label>
+        <div class="search-input-group">
+            <input type="text" id="searchFuncionarioInput" class="form-control" placeholder="Digite o nome ou matrícula..." />
+            <button type="button" id="searchFuncionarioBtn" class="btn-submit">
+                <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                Pesquisar
+            </button>
+        </div>
+        <p id="searchMessage" class="text-danger mt-2"></p>
+    </div>
+
+    <div id="loadingIndicator" class="loading-indicator" style="display:none;">Carregando informações...</div>
+
+    <div class="results-grid">
+        <div class="results-box personal-info-box">
+            <h3>Informações Pessoais</h3>
+            <div id="personalInfoContent" class="results-content">
+                <p>Nenhum funcionário selecionado.</p>
+            </div>
+        </div>
+
+        <div class="results-box subscriptions-box">
+            <h3>Assinaturas</h3>
+            <div id="subscriptionsContent" class="results-content">
+                <p>Nenhuma assinatura encontrada.</p>
+            </div>
+        </div>
+
+        <div class="results-box loans-box">
+            <h3>Empréstimos</h3>
+            <div id="loansContent" class="results-content">
+                <p>Nenhum empréstimo encontrado.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchFuncionarioInput');
+            const searchButton = document.getElementById('searchFuncionarioBtn');
+            const searchMessage = document.getElementById('searchMessage');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const personalInfoContent = document.getElementById('personalInfoContent');
+            const subscriptionsContent = document.getElementById('subscriptionsContent');
+            const loansContent = document.getElementById('loansContent');
+
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            async function performSearch() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm === '') {
+                    searchMessage.textContent = "Por favor, digite um nome ou matrícula para pesquisar.";
+                    resetResultDisplays();
+                    return;
+                }
+
+                searchMessage.textContent = ""; // Clear previous messages
+                loadingIndicator.style.display = 'block'; // Show loading indicator
+                resetResultDisplays(); // Clear previous results before new search
+
+                try {
+                    const response = await fetch(`@Url.Action("SearchApi", "Funcionarios")?termoBusca=${encodeURIComponent(searchTerm)}`);
+
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            searchMessage.textContent = "Funcionário não encontrado.";
+                        } else {
+                            const errorData = await response.json();
+                            searchMessage.textContent = `Erro: ${errorData.message || response.statusText}`;
+                        }
+                        return;
+                    }
+
+                    const data = await response.json();
+                    displayResults(data);
+
+                } catch (error) {
+                    console.error('Erro ao buscar funcionário:', error);
+                    searchMessage.textContent = "Ocorreu um erro ao realizar a busca. Tente novamente.";
+                } finally {
+                    loadingIndicator.style.display = 'none'; // Hide loading indicator
+                }
+            }
+
+            function displayResults(data) {
+                // Display Personal Info
+                if (data.funcionario) {
+                    personalInfoContent.innerHTML = `
+                        <p><strong>Nome:</strong> ${data.funcionario.nome}</p>
+                        <p><strong>Matrícula:</strong> ${data.funcionario.matricula}</p>
+                        <p><strong>Email:</strong> ${data.funcionario.email}</p>
+                        <p><strong>Telefone:</strong> ${data.funcionario.telefone}</p>
+                    `;
+                } else {
+                    personalInfoContent.innerHTML = '<p>Nenhuma informação pessoal encontrada.</p>';
+                }
+
+                // Display Subscriptions
+                if (data.assinaturas && data.assinaturas.length > 0) {
+                    subscriptionsContent.innerHTML = data.assinaturas.map(a => `
+                        <div class="item-card">
+                            <p><strong>Tipo:</strong> ${a.Plano}</p>
+                            <p><strong>Início:</strong> ${a.dataInicio}</p>
+                            <p><strong>Fim:</strong> ${a.dataFim}</p>
+                            <p><strong>Status:</strong> <span class="${a.ativa ? 'text-green-600' : 'text-red-600'}">${a.ativa ? 'Ativa' : 'Inativa'}</span></p>
+                        </div>
+                    `).join('');
+                } else {
+                    subscriptionsContent.innerHTML = '<p>Nenhuma assinatura encontrada.</p>';
+                }
+
+                // Display Loans
+                if (data.emprestimos && data.emprestimos.length > 0) {
+                    loansContent.innerHTML = data.emprestimos.map(e => `
+                        <div class="item-card">
+                            <p><strong>Livro:</strong> ${e.ExemplarId} (ISBN: ${e.isbnLivro})</p>
+                            <p><strong>Empréstimo:</strong> ${e.dataEmprestimo}</p>
+                            <p><strong>Devolução Prevista:</strong> ${e.dataDevolucaoPrevista}</p>
+                            <p><strong>Devolução Real:</strong> ${e.dataDevolucaoReal}</p>
+                            <p><strong>Status:</strong> <span class="${e.devolvido ? 'text-green-600' : 'text-orange-600'}">${e.devolvido ? 'Devolvido' : 'Pendente'}</span></p>
+                        </div>
+                    `).join('');
+                } else {
+                    loansContent.innerHTML = '<p>Nenhum empréstimo encontrado.</p>';
+                }
+            }
+
+            function resetResultDisplays() {
+                personalInfoContent.innerHTML = '<p>Nenhum funcionário selecionado.</p>';
+                subscriptionsContent.innerHTML = '<p>Nenhuma assinatura encontrada.</p>';
+                loansContent.innerHTML = '<p>Nenhum empréstimo encontrado.</p>';
+            }
+        });
+    </script>
+}
