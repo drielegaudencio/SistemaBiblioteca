@@ -206,3 +206,40 @@ h1 {
     right: 1.5rem; /* Distância da parte direita */
     z-index: 1000; /* Garante que fique acima de outros elementos */
 }
+
+/* NOVOS ESTILOS PARA PÁGINAS DE EXCLUSÃO */
+
+/* Botão de Excluir Principal (para a confirmação) */
+.btn-delete {
+    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500;
+}
+
+/* Estilo para a mensagem de confirmação na página de exclusão */
+.delete-confirmation-message {
+    @apply text-lg text-gray-700 mb-6 text-center;
+}
+
+.delete-details {
+    @apply mb-6 p-4 bg-gray-50 rounded-md border border-gray-200;
+}
+
+    .delete-details dt {
+        @apply text-sm font-medium text-gray-500;
+    }
+
+    .delete-details dd {
+        @apply mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2;
+    }
+
+/* Estilos de Tabela para Páginas (reutilizados dos relatórios/index) */
+.data-table {
+    @apply min-w-full divide-y divide-gray-200;
+}
+
+    .data-table thead th {
+        @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+    }
+
+    .data-table tbody td {
+        @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900;
+    }

@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="GeneroPrincipal" class="control-label"></label>
-                <input asp-for="GeneroPrincipal" class="form-control" />
+                <select asp-for="GeneroPrincipal" class="form-control" asp-items="ViewBag.GeneroPrincipal"></select>
                 <span asp-validation-for="GeneroPrincipal" class="text-danger"></span>
             </div>
             <div class="form-group">

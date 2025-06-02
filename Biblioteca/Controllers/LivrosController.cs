@@ -112,7 +112,7 @@ namespace Biblioteca.Controllers
                     // Outras propriedades do Livro que não sejam coleções de navegação
                 };
 
-                var generoListItems = _context.Generos.Select(u => new SelectListItem
+               /* var generoListItems = _context.Generos.Select(u => new SelectListItem
                 {
                     Value = u.Id.ToString(),
                     Text = u.Nome
@@ -120,7 +120,7 @@ namespace Biblioteca.Controllers
                              // Adiciona o item "Selecione" no início da lista
                 generoListItems.Insert(0, new SelectListItem { Value = "", Text = "Selecione um Gênero" });
                 ViewBag.GeneroPrincipal = generoListItems;
-
+*/
                 // A lógica de preenchimento automático do formulário pela API agora será mais controlada pelo JS na View.
                 // Esta parte do código ainda pode ser útil para uma validação final ou para preencher se o ISBN for digitado manualmente.
 
@@ -178,7 +178,7 @@ namespace Biblioteca.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        /*public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -288,10 +288,10 @@ namespace Biblioteca.Controllers
                                                     })
                                                     .ToListAsync();
             return View(viewModel);
-        }
+        }*/
     
 
-/*
+
         // GET: Livros/Edit/5
         // Exibe o formulário para editar um livro existente
         public async Task<IActionResult> Edit(int? id)
@@ -300,7 +300,12 @@ namespace Biblioteca.Controllers
             {
                 return NotFound();
             }
-
+            var generoListItems = _context.Generos.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = u.Nome
+            }).ToList();
+            ViewBag.GeneroPrincipal = generoListItems;
             var livro = await _context.Livros.FindAsync(id);
             if (livro == null)
             {
@@ -341,7 +346,7 @@ namespace Biblioteca.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(livro);
-        }*/
+        }
 
 // GET: Livros/Delete/5
 // Exibe a confirmação para deletar um livro

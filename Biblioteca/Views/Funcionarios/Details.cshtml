@@ -1,15 +1,105 @@
 ﻿@model Biblioteca.Models.Funcionario
 
 @{
+    ViewData["Title"] = "Detalhes do Funcionário";
+}
+<link rel="stylesheet" href="~/css/_FormStyles.css" />
+@* <h1 class="form-page-title">Detalhes do Funcionário</h1> *@
+
+<div class="form-container">
+    <h4 class="text-xl font-semibold text-gray-900 mb-4">Informações do Funcionário</h4>
+    <hr class="border-gray-300 mb-6" />
+
+    <div class="delete-details">
+        @* Reutilizando a classe de detalhes para um layout de grid *@
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">
+                    @Html.DisplayNameFor(model => model.Matricula)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @Html.DisplayFor(model => model.Matricula)
+                </dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">
+                    @Html.DisplayNameFor(model => model.Nome)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @Html.DisplayFor(model => model.Nome)
+                </dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">
+                    @Html.DisplayNameFor(model => model.Cpf)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @Html.DisplayFor(model => model.Cpf)
+                </dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">
+                    @Html.DisplayNameFor(model => model.Cargo)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @Html.DisplayFor(model => model.Cargo)
+                </dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">
+                    @Html.DisplayNameFor(model => model.Salario)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @Html.DisplayFor(model => model.Salario)
+                </dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">
+                    @Html.DisplayNameFor(model => model.Endereco)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @Html.DisplayFor(model => model.Endereco)
+                </dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">
+                    @Html.DisplayNameFor(model => model.Telefone)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @Html.DisplayFor(model => model.Telefone)
+                </dd>
+            </div>
+            <div class="sm:col-span-1">
+                <dt class="text-sm font-medium text-gray-500">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="form-actions mt-6">
+        @* Reutilizando a classe form-actions para os botões *@
+        <a asp-action="Index" class="btn-back">Voltar para a Lista</a>
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn-submit">Editar</a>
+        <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn-delete">Deletar</a> @* Usando o btn-delete para o botão de exclusão *@
+    </div>
+</div>
+
+
+@* @model Biblioteca.Models.Funcionario
+
+@{
     ViewData["Title"] = "Details";
 }
-
-<h1>Details</h1>
+<link rel="stylesheet" href="~/css/_ListStyle.css" />
 
 <div>
-    <h4>Funcionario</h4>
+    <h4 class="form-page-title">Funcionario</h4>
     <hr />
-    <dl class="row">
+    <dl class="data-table">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Matricula)
         </dt>
@@ -66,3 +156,4 @@
     <a asp-action="Delete" asp-all-route-id="@Model?.Id">Deletar</a>
     <a asp-action="Index">Voltar</a>
 </div>
+ *@
