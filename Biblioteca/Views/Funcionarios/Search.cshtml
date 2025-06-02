@@ -493,8 +493,8 @@
                 }
 
                 // Display Loans
-                if (data.emprestimos && data.emprestimos.length > 0) {
-                    loansContent.innerHTML = data.emprestimos.map(e => `
+                if (data.emprestimosRealizados && data.emprestimosRealizados.length > 0) {
+                    loansContent.innerHTML = data.emprestimosRealizados.map(e => `
                         <div class="item-card">
                             <p><strong>Livro:</strong> ${e.ExemplarId} (ISBN: ${e.isbnLivro})</p>
                             <p><strong>Empréstimo:</strong> ${e.dataEmprestimo}</p>

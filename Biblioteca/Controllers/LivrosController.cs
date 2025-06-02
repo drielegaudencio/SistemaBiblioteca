@@ -178,6 +178,120 @@ namespace Biblioteca.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var livro = await _context.Livros
+                                    .Include(l => l.LivroGeneros) // Inclui as relações existentes
+                                    .FirstOrDefaultAsync(m => m.Id == id);
+            if (livro == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new LivroViewModel
+            {
+                Id = livro.Id,
+                Titulo = livro.Titulo,
+                Autor = livro.Autor,
+                Isbn = livro.Isbn,
+                AnoPublicacao = (int)livro.AnoPublicacao,
+                NumeroPaginas = (int)livro.NumeroPaginas,
+                GeneroPrincipal = livro.GeneroPrincipal,
+                SelectedGenreIds = livro.LivroGeneros?.Select(lg => lg.GeneroId).ToList() // Popula os gêneros selecionados
+            };
+
+            // Popula a lista de todos os gêneros disponíveis
+            viewModel.AvailableGenres = await _context.Generos
+                                                    .Select(g => new SelectListItem
+                                                    {
+                                                        Value = g.Id.ToString(),
+                                                        Text = g.Nome,
+                                                        Selected = viewModel.SelectedGenreIds != null && viewModel.SelectedGenreIds.Contains(g.Id) // Marca os já selecionados
+                                                    })
+                                                    .ToListAsync();
+            return View(viewModel);
+        }
+
+        // POST: Livros/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, LivroViewModel viewModel) // Recebe o ViewModel
+        {
+            if (id != viewModel.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var livro = await _context.Livros
+                                        .Include(l => l.LivroGeneros)
+                                        .FirstOrDefaultAsync(l => l.Id == id);
+
+                if (livro == null)
+                {
+                    return NotFound();
+                }
+
+                // Atualiza as propriedades do livro
+                livro.Titulo = viewModel.Titulo;
+                livro.Autor = viewModel.Autor;
+                livro.Isbn = viewModel.Isbn;
+                livro.AnoPublicacao = viewModel.AnoPublicacao;
+                livro.NumeroPaginas = viewModel.NumeroPaginas;
+                livro.GeneroPrincipal = viewModel.GeneroPrincipal;
+
+                // Atualiza as relações LivroGenero
+                // 1. Remove as relações antigas
+                _context.LivroGeneros.RemoveRange(livro.LivroGeneros);
+
+                // 2. Adiciona as novas relações
+                if (viewModel.SelectedGenreIds != null && viewModel.SelectedGenreIds.Any())
+                {
+                    foreach (var generoId in viewModel.SelectedGenreIds)
+                    {
+                        livro.LivroGeneros.Add(new LivroGenero { LivroId = livro.Id, GeneroId = generoId });
+                    }
+                }
+
+                try
+                {
+                    _context.Update(livro); // Atualiza o livro e as relações em cascata
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LivroExists(livro.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Se o ModelState não for válido, repopula a lista de gêneros para a View
+            viewModel.AvailableGenres = await _context.Generos
+                                                    .Select(g => new SelectListItem
+                                                    {
+                                                        Value = g.Id.ToString(),
+                                                        Text = g.Nome,
+                                                        Selected = viewModel.SelectedGenreIds != null && viewModel.SelectedGenreIds.Contains(g.Id)
+                                                    })
+                                                    .ToListAsync();
+            return View(viewModel);
+        }
+    
+
+/*
         // GET: Livros/Edit/5
         // Exibe o formulário para editar um livro existente
         public async Task<IActionResult> Edit(int? id)
@@ -227,11 +341,11 @@ namespace Biblioteca.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(livro);
-        }
+        }*/
 
-        // GET: Livros/Delete/5
-        // Exibe a confirmação para deletar um livro
-        public async Task<IActionResult> Delete(int? id)
+// GET: Livros/Delete/5
+// Exibe a confirmação para deletar um livro
+public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
